@@ -1,0 +1,20 @@
+/* import tailwind css*/
+
+@tailwind base;
+/* Component classes */
+@tailwind components;
+/* Utility classes */
+@tailwind utilities;
+
+body {
+  @apply bg-orange-200 h-full overflow-x-hidden;
+}
+
+/* Apply full height to the element with id '__next' */
+#__next {
+  @apply h-full;
+}
+/* Apply full height to the HTML element */
+html {
+  @apply h-full;
+}
