@@ -15,7 +15,7 @@ const ListPage: NextPage = () => {
 
   const {data} = useList(listId as string)
   
-  
+  console.log("Data from useList:", data);
   console.log("récupération",router.query.listId);
   
 

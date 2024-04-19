@@ -34,7 +34,7 @@ const HandleCreate = () => {
           console.log("List created successfully:", responseData);
 
           // Rediriger l'utilisateur ou effectuer d'autres actions après la création de la liste
-          router.push(`/${responseData.id}`);
+          router.push(`/${responseData.newList.id}`);
         } else {
           console.error('Failed to create list:', response.status, response.statusText);
         }

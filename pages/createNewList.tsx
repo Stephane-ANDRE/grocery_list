@@ -3,11 +3,9 @@ import HandleProduct from "@/components/HandleProduct";
 import HandleCreate from "@/components/HandleCreateList";
 import HandleEdit from "@/components/HandleEditList";
 import { useRouter } from "next/router";
-import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function NewList() {
   const router = useRouter();
-  const { data: currentUserData } = useCurrentUser(); // Utilisation du hook useCurrentUser
 
   return (
     <div className="relative h-full w-full bg-[url('/images/grocery.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">

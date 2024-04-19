@@ -56,7 +56,7 @@ export default function NewList() {
       if (currentUserData && listName.trim() !== "") {
         // Envoyer les données au backend pour créer la liste
         console.log("Creating list with name:", listName, "and products:", products);
-        const response = await fetch("/api/user/createlist", {
+        const response = await fetch("/api/user/createList", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -74,20 +74,21 @@ export default function NewList() {
           console.log("List created successfully:", responseData);
           
           // Rediriger l'utilisateur ou effectuer d'autres actions après la création de la liste
-          router.push(`/${responseData.id}`);
-       // } else {
-        //  console.error('Failed to create list:', response.status, response.statusText);
+          router.push(`/${responseData.newList.id}`);
+        } else {
+          console.error('Failed to create list:', response.status, response.statusText);
         }
-     // } else {
-     //   console.warn("No current user data available or list name is empty.");
+      } else {
+        console.warn("No current user data available or list name is empty.");
       }
     } catch (error) {
       console.error('Error creating list:', error);
     }
   };
   
-  
-
+  // Ajout de consoles log pour afficher le titre de la liste et les produits saisis par l'utilisateur
+  console.log("List name:", listName);
+  console.log("Products:", products);
 
   return (
     <div className="relative h-full w-full bg-[url('/images/grocery.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">

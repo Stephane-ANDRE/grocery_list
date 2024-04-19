@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Hashing the password using bcrypt
-        const hashedPassword = await bcrypt.hash(password, 12);
+        const hashedPassword = await bcrypt.hash(password, 9);
 
         // Creating a new user in the database
         const user = await prismadb.user.create({

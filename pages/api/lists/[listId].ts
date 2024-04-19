@@ -13,15 +13,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Authenticate the user
         await serverAuth(req, res);
         
-        // Extract the movieId from the query parameters
+        // Extract the listId from the query parameters
         const { listId } = req.query;
 
-        // Check if movieId is not a string or is undefined
+        // Check if listId is not a string or is undefined
         if (typeof listId !== "string" || !listId) {
             throw new Error("Invalid Id");
         }
 
-        // Find the movie with the provided movieId
+        // Find the list with the provided listId
         const list = await prismadb.list.findUnique({
             where: {
                 id: listId
@@ -29,12 +29,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 console.log("listFound:", list);
 
-        // If no movie found with the provided movieId, throw an error
+        // If no list found with the provided listId, throw an error
         if (!list) {
             throw new Error("Invalid Id");
         }
 
-        // Return the movie details in the response
+        // Return the list details in the response
         return res.status(200).json(list);
     } catch (error) {
         // Log any errors and return a 400 status code in case of failure

@@ -2,7 +2,8 @@ import React from "react";
 import useOneList from "@/hooks/useOneList";
 
 interface OneListProps {
-    listId: string; // Add a prop for the list ID
+    data: Record<string, any>; 
+    listId: string;
 }
 
 const OneList: React.FC<OneListProps> = ({ listId }) => {

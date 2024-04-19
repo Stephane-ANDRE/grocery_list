@@ -1,8 +1,8 @@
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
 
-const useList = (listId: string) => {
-    const { data, error, isLoading } = useSWR(listId ? `/api/lists/${listId}` : null, fetcher, {
+const useList = (id: string) => {
+    const { data, error, isLoading } = useSWR(id ? `/api/lists/${id}` : null, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
