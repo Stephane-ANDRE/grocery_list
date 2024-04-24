@@ -21,6 +21,8 @@ console.log("currentUser:", currentUser);
         });
 console.log("registeredListIds:", registeredListIds);
 
+
+
         // Return the favorite movies as JSON response
         return res.status(200).json(registeredListIds);
     } catch (error) {

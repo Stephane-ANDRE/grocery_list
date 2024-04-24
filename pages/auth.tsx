@@ -20,18 +20,20 @@ const login = useCallback(async () => {
         await signIn("credentials", {
             email,
             password,
-            // redirect:false,
             callbackUrl: "/profiles"           
         });
-
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        // Afficher un message d'erreur ou gérer l'erreur d'une autre manière
+        alert("Humm...Désolé, mauvais mail ou mot de passe.");
+        // Rediriger l'utilisateur vers une page spécifique
+        window.location.href = "/auth"; // Remplacez "previous-page" par l'URL de la page précédente
     }
 }, [email, password])
 
 const register = useCallback(async () =>{
     try {
-        await axios.post("/api/register", {
+        await axios.post("/api/user/register", {
             email,
             name,
             password

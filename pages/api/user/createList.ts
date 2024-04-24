@@ -15,6 +15,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ error: "User is not authenticated" });
     }
 
+    // Retrieve the number of saved lists for the current user
+    const savedListCount = await prismadb.list.count({
+      where: {
+        userId: currentUser?.id,
+      },
+    });
+
+    // Check if the user has already saved 10 lists
+    if (savedListCount >= 10) {
+      return res.status(400).json({ message: "Désolé, Vous pouvez n'enregister que 10 listes." });
+    }
+
     const { name, products } = req.body;
 
     if (typeof name !== "string") {
@@ -36,18 +48,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // Met à jour l'utilisateur en ajoutant l'ID de la nouvelle liste à la liste des listes enregistrées
-const user = await prismadb.user.update({
-  where: {
-    id: currentUser.id,
-  },
-  data: {
-    registeredListIds: {
-      push: newList.id,
-    }
-  }
-});
+    const updatedUser = await prismadb.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        registeredListIds: {
+          push: newList.id,
+        }
+      }
+    });
 
-return res.status(200).json({newList, user});
+    return res.status(200).json({ newList, updatedUser });
   } catch (error) {
     console.error("Error:", error);
     return res.status(400).json({ error: "Something went wrong" });

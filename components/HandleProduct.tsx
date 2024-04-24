@@ -1,91 +1,121 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Input from "@/components/Input";
-import { AiOutlinePlus, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
-const HandleProduct = () => {
-  const [product, setProduct] = useState(""); // State for managing the input value for a product
-  const [products, setProducts] = useState<string[]>([]); // State for managing the list of products
-  const [editingProduct, setIsEditingProduct] = useState<string | null>(null); // State for managing the product being edited
+interface HandleProductProps {
+  products: string[]; // Liste des produits
+  setProducts: React.Dispatch<React.SetStateAction<string[]>>; // Fonction pour mettre à jour la liste de produits
+}
 
-  // Logging product, products, and editingProduct for debugging
-  console.log("product:", product);
-  console.log("products:", products);
-  console.log("editingProduct:", editingProduct);
+const HandleProduct: React.FC<HandleProductProps> = ({ products, setProducts }) => {
+  const [product, setProduct] = useState(""); // State pour gérer la valeur de l'input pour un produit
+  const [editedProductName, setEditedProductName] = useState(""); // State pour gérer le nom édité du produit
+  const [editingProductIndex, setEditingProductIndex] = useState<number | null>(null); // State pour garder une trace de l'index du produit en cours d'édition
 
-  // Function to handle editing a product
-  const handleEditProduct = (index: number) => {
-    // Retrieve the product to edit
-    const editingProduct = products[index];
-    // Set the input value to the editing product
-    setProduct(editingProduct);
-    // Remove the product from the list
-    const updatedProducts = products.filter((_, i) => i !== index);
-    setProducts(updatedProducts);
-    // Update the state to indicate editing mode
-    setIsEditingProduct(editingProduct);
-  };
-
-  // Function to handle adding a product
+  // Fonction pour ajouter un produit
   const handleAddProduct = () => {
     if (product.trim() !== "") {
-      // Add the product to the list of products
+      // Ajouter le produit à la liste des produits
       setProducts([...products, product.trim()]);
-      // Reset the input value
+      // Réinitialiser la valeur de l'input
       setProduct("");
     }
   };
 
-  // Function to handle removing a product
+  // Fonction pour supprimer un produit
   const handleRemoveProduct = (index: number) => {
-    // Remove the product from the list
+    // Supprimer le produit de la liste
     const updatedProducts = products.filter((_, i) => i !== index);
     setProducts(updatedProducts);
   };
 
-  // Function to handle key down event
-  function handleKeyDown(e: any) {
+  // Fonction pour gérer l'événement de pression d'une touche
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && product.trim() !== "") {
-      // If Enter key is pressed and product input is not empty, add the product
+      // Si la touche Entrée est pressée et que l'input pour le produit n'est pas vide, ajouter le produit
       handleAddProduct();
     }
   }
 
+  // Fonction pour activer le mode d'édition d'un produit
+  const startEditingProduct = (index: number, productName: string) => {
+    setEditedProductName(productName);
+    setEditingProductIndex(index);
+  };
+
+  // Fonction pour sauvegarder les modifications apportées au nom du produit
+  const saveEditedProduct = (index: number) => {
+    if (editedProductName.trim() !== "") {
+      const updatedProducts = [...products];
+      updatedProducts[index] = editedProductName.trim();
+      setProducts(updatedProducts);
+    }
+    setEditingProductIndex(null);
+  };
+
   return (
     <section>
-      {/* Input field for entering a product */}
+      {/* Champ d'input pour entrer un produit */}
       <div className="flex gap-4 items-center mb-4">
         <Input
           label="Product"
           type="text"
           value={product}
-          onChange={(e: any) => setProduct(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setProduct(e.target.value)
+          }
           id="text"
           onKeyDown={handleKeyDown}
         />
-        {/* Button to add a product */}
+        {/* Bouton pour ajouter un produit */}
         <AiOutlinePlus
           className="text-white mr-2"
           size={25}
           onClick={handleAddProduct}
         />
       </div>
-      {/* List of products */}
+      {/* Liste des produits */}
       <ul>
         {products.map((item, index) => (
           <li key={index} className="mb-4">
             <div className="flex justify-between items-center">
-              {/* Display the product */}
-              <span className="text-white">{item}</span>
-              <div className="flex">
-                {/* Button to edit a product */}
-                <AiOutlineEdit
-                  className="text-blue-500 cursor-pointer"
-                  size={25}
-                  onClick={() => handleEditProduct(index)}
+              {editingProductIndex === index ? (
+                // Afficher le champ d'édition si le produit est en cours d'édition
+                <Input
+                  type="text"
+                  value={editedProductName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEditedProductName(e.target.value)
+                  }
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      saveEditedProduct(index);
+                    }
+                  }}
                 />
-                {/* Button to delete a product */}
+              ) : (
+                // Afficher le nom du produit si le produit n'est pas en cours d'édition
+                <span className="text-white">{item}</span>
+              )}
+              <div className="flex">
+                {editingProductIndex === index ? (
+                  // Afficher l'icône de sauvegarde si le produit est en cours d'édition
+                  <AiOutlineEdit
+                    className="text-blue-500 mr-2 cursor-pointer"
+                    size={25}
+                    onClick={() => saveEditedProduct(index)}
+                  />
+                ) : (
+                  // Afficher l'icône d'édition si le produit n'est pas en cours d'édition
+                  <AiOutlineEdit
+                    className="text-blue-500 mr-2 cursor-pointer"
+                    size={25}
+                    onClick={() => startEditingProduct(index, item)}
+                  />
+                )}
+                {/* Bouton pour supprimer un produit */}
                 <AiOutlineDelete
-                  className="text-red-500 mr-2 cursor-pointer"
+                  className="text-red-500 cursor-pointer"
                   size={25}
                   onClick={() => handleRemoveProduct(index)}
                 />

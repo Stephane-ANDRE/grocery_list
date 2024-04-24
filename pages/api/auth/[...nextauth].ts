@@ -34,7 +34,7 @@ export const authOptions: AuthOptions = {
         }});
 
         if (!user || !user.hashedPassword) {
-          throw new Error('Email does not exist');
+          throw new Error('Hummm... mauvais mot de passe ou email');
         }
 
         const isCorrectPassword = await compare(credentials.password, user.hashedPassword);

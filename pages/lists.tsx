@@ -1,11 +1,11 @@
-// pages/all-lists.tsx
-
+import { useRouter } from "next/router";
 import { NextPage } from 'next';
 import Navbar from '@/components/Navbar';
 import AllLists from '@/components/AllLists';
 import useAllLists from '@/hooks/useAllLists';
 
 const AllListsPage: NextPage = () => {
+  const router = useRouter() 
   // Utilisation du hook useAllLists pour récupérer les données des listes
   const { data: lists, error, isLoading } = useAllLists();
 
@@ -21,8 +21,16 @@ const AllListsPage: NextPage = () => {
             <p>Error: {error.message}</p>
           ) : (
             // Affichage du composant AllLists avec les données récupérées
-            <AllLists data={lists} />
+            <AllLists name="" />
           )}
+          <div className="flex flex-row items-center gap-4 mt-8 justify-center">
+          <button
+              className=" bg-orange-400 hover:bg-orange-500 transition text-white px-4 py-2 rounded-md"
+              onClick={() => router.push("/")}
+            >
+              Retour
+            </button>
+            </div> 
         </div>
       </div>
     </div>

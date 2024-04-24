@@ -5,7 +5,7 @@ import fetcher from "@/lib/fetcher";
 // Custom hook for fetching data from the movies API endpoint
 const useAllLists = () => {
       // Using the useSWR hook to fetch data from the movies API endpoint
-const { data, error, isLoading} = useSWR("/api/lists", fetcher, {
+const { data, error, isLoading} = useSWR("/api/user/getAllLists", fetcher, {
     // Disabling revalidation when the data is stale, on focus, or on reconnect
     revalidateIfStale: false,
     revalidateOnFocus:false,
